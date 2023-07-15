@@ -10,12 +10,14 @@ module.exports.create = async (req, res)=>{
         // why only user id because id is unique for each user in DB
         });
         return res.redirect('back');
-    } catch (error) {        
+    } catch (err) {   
+           console.log('Error', err);
+           return;
     }
     }
 
 
-    module.exports.destroy = async (req, res) => {
+module.exports.destroy = async (req, res) => {
       try {
         // Check if the post exists
         let post = await Post.findOneAndDelete({ _id: req.params.id });
@@ -34,10 +36,10 @@ module.exports.create = async (req, res)=>{
     
         // Delete the post's associated comments
         await Comment.deleteMany({ post: req.params.id });
-      
         return res.redirect("back");
-      } catch (error) {
         
+      } catch (error) {
+        console.log('Error', err);
         return res.redirect("back");
       }
     };

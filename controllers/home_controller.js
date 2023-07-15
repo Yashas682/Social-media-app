@@ -12,7 +12,7 @@ try{
         populate:{
             path:'user'
         }
-    }) 
+    });
     // .populate('likes')
     let user = await User.find({});
     return res.render('home',{
@@ -20,8 +20,10 @@ try{
         // header : "CodeBook",
         posts : posts,
         all_users : user
-    })
-} catch (error) {        
+    });
+} catch (err) {     
+    console.log('Error', err);
+    return;  
 }
 }
 

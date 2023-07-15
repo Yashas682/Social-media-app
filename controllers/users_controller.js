@@ -3,10 +3,10 @@ const User = require('../models/user');
 
 module.exports.profile = async (req, res) => {
   try {
-    console.log(req.params.id);
+    // console.log(req.params.id);
     let user = await User.findById(req.params.id);
-    return res.render("user_profile.ejs", {
-      title: "Profile Page",
+    return res.render("user_profile", {
+      title: "User Profile",
       // header: "User Profile",
       profile_user: user,
     });
@@ -119,6 +119,7 @@ module.exports.create = async (req, res) => {
 // sign in and create a session for the user
 // get the sign in data
     module.exports.createSession = async function(req, res) {
+      req.flash('success','Logged in Successfully');
     // steps to authenticate 
     // find the user
         try {
@@ -148,6 +149,7 @@ module.exports.create = async (req, res) => {
 module.exports.destroySession = (req, res) => {
   req.logout((err) => {
     if (err) return ;
+    req.flash('success','You have Logged out!');
     // req.flash("success", "Logged out");
     return res.redirect("/");
     });
