@@ -9,10 +9,12 @@ module.exports.create = async (req, res)=>{
         user: req.user._id
         // why only user id because id is unique for each user in DB
         });
+
+        req.flash('success', 'Post published');
         return res.redirect('back');
     } catch (err) {   
-           console.log('Error', err);
-           return;
+      req.flash('success', err);
+      return res.redirect('back');
     }
     }
 
@@ -36,6 +38,9 @@ module.exports.destroy = async (req, res) => {
     
         // Delete the post's associated comments
         await Comment.deleteMany({ post: req.params.id });
+
+        req.flash('success', 'Post and associated comments deleted');
+
         return res.redirect("back");
         
       } catch (error) {
