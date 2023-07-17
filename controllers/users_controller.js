@@ -23,6 +23,7 @@ module.exports.Update = async (req, res) => {
       //  i can see vikas user id and from there and can change it , which i don't want
 
      let user= await User.findByIdAndUpdate(req.params.id, req.body); 
+     req.flash('success', 'Updated!');
      return res.redirect("back");
     } catch (error) {
       //   return res.status(500).send("Iternal Server error",error)
@@ -30,6 +31,7 @@ module.exports.Update = async (req, res) => {
       // return res.redirect("back");
     }
   } else {
+    req.flash('error', 'Unauthorized!');
     return res.status(401).send("Unuthorize");
   }
 };
@@ -83,6 +85,7 @@ module.exports.signIn = function(req, res){
 module.exports.create = async (req, res) => {
     try {
       if (req.body.password != req.body.confirm_password) {
+        req.flash('error', 'Passwords do not match');
         return res.redirect("back");
       }
       let user = await User.findOne({ email: req.body.email });
@@ -92,7 +95,9 @@ module.exports.create = async (req, res) => {
       }
       return res.redirect("back");
     } catch (error) {
-      return res.end("error in creating Account", error);
+      req.flash('success', 'You have signed up, login to continue!');
+      // return res.end("error in creating Account", error);
+      return res.redirect('back');
     }
   };
 
