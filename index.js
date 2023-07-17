@@ -30,6 +30,8 @@ app.use(exprees.urlencoded());
 app.use(cookieParser());
 
 app.use(exprees.static('./assets'));
+// make the uploads path available to the browser
+app.use('/uploads', exprees.static(__dirname + '/uploads'));
 
 app.use(expreesLayouts);
 

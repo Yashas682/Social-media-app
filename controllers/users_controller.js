@@ -1,4 +1,6 @@
 const User = require('../models/user');
+const fs = require('fs');
+const path = require('path');
 
 
 module.exports.profile = async (req, res) => {
@@ -23,12 +25,29 @@ module.exports.Update = async (req, res) => {
       //  i can see vikas user id and from there and can change it , which i don't want
 
      let user= await User.findByIdAndUpdate(req.params.id, req.body); 
-     req.flash('success', 'Updated!');
-     return res.redirect("back");
+     User.uploadedAvatar(req, res, function(err){
+        if(err) {console.log('*****Multer Error: ', err)}
+
+        user.name = req.body.name;
+        user.email = req.body.email;
+
+        if(req.file){
+
+          if(user.avatar){
+              fs.unlinkSync(path.join(__dirname, '..', user.avatar));
+          }
+          // this is saving the path of the uploaded file into the avatar field in the user
+          user.avatar = User.avatarPath + '/' + req.file.filename;
+        }
+        user.save();
+        return res.redirect("back");
+     });
+    //  req.flash('success', 'Updated!');
+    //  return res.redirect("back");
     } catch (error) {
       //   return res.status(500).send("Iternal Server error",error)
-      // console.log(error);
-      // return res.redirect("back");
+      req.flash('error', err);
+      return res.redirect("back");
     }
   } else {
     req.flash('error', 'Unauthorized!');
