@@ -1,7 +1,7 @@
 const  exprees = require('express');
 const cookieParser = require('cookie-parser');
 const app = exprees();
-const port = 1000;
+const port = 8000;
 const expreesLayouts = require('express-ejs-layouts');
 const db = require('./config/mongoose');
 // used for session cookie and authentication passport
