@@ -19,32 +19,26 @@ module.exports.index = async function(req, res){
 }
 
 
-module.exports.destroy = async (req, res) => {
+module.exports.destroy = async function (req, res) {
     try {
       // Check if the post exists
-      let post = await Post.findOne({ _id: req.params.id });
+      let post = await Post.findById(req.params.id);
   
-    //   if (!post) {
-    //     console.log("Post not found");
-    //     return res.status(404).send("Post not found");
-    //   }
-  
-    //   // Check if the current user is the owner of the post
-    //   if (post.user.toString() !== req.user._id.toString()) {
-    //     console.log("User is not the owner of the post");
-    //     return res.status(401).send("Unauthorized");
-    //   }
+   if(post.user == req.user.id){
+    await post.deleteOne();
+   
   
       // Delete the post's associated comments
       await Comment.deleteMany({ post: req.params.id });
-  
-      // Remove the post .remove is not working so i have changed it to .deleteOne
-      await post.deleteOne();
-  
-      
+
       return res.json(200, {
         message: "Post and associated comments deleted successfully!"
       });
+    }else{
+      return res.json(401, {
+        message: "You cannot delete this post!"
+      });
+    }
 
     } catch (error) {
         console.log('********', err);
@@ -52,4 +46,4 @@ module.exports.destroy = async (req, res) => {
         message: "Internal Server Error"
       });
     }
-  };
+  }
