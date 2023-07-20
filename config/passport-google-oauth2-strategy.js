@@ -46,7 +46,7 @@ async function(accessToken, refreshToken, profile, done) {
       console.log(profile);
   
       if (user) {
-        // if found, set this user as req.user
+        // if found, set this user as req.user i.e, sign in tht user
         return done(null, user);
       } else {
         // if not found, create the user and set it as req.user
