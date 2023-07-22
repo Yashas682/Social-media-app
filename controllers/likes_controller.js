@@ -1,5 +1,5 @@
 const Like = require("../models/like");
-const Comment = require("../models/post");
+const Post = require("../models/post");
 const Comment = require('../models/comment');
 
 
@@ -29,18 +29,18 @@ module.exports.toggleLike = async function(req, res){
             likeable.likes.pull(existingLike._id);
             likeable.save();
 
-            existingLike.remove();
-            deleted: true;
+            existingLike.deleteOne();
+            deleted = true;
 
         }else{
             // else make a new like
-            let newLike = await Like.findOne.create({
+            let newLike = await Like.create({
                 user: req.user._id,
                 likeable: req.query.id,
                 onModel: req.query.type
             });
 
-            likeable.likes.push(like._id);
+            likeable.likes.push(newLike._id);
             likeable.save();
         }
 
@@ -55,8 +55,9 @@ module.exports.toggleLike = async function(req, res){
 
     }catch(err){
         console.log(err);
-        return res.json(500, {
-            message: 'Internal server error'
-        });
+        // return res.json(500, {
+        //     message: 'Internal server error'
+        // });
+        return res.status(200).json({ message: 'Internal server error' });
     }
 }

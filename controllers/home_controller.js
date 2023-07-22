@@ -13,9 +13,12 @@ try{
         path: 'comments',
         populate:{
             path:'user'
+        },
+        populate: {
+            path: 'likes'
         }
-    });
-    // .populate('likes')
+    }).populate('likes');
+    
     let user = await User.find({});
     return res.render('home',{
         title : "Socialmedia | Home",
