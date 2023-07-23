@@ -13,7 +13,7 @@ module.exports.chatSockets =(socketServer)=>{
             console.log(`socket connection disconnected`)
         });
 
-        socket.on('join_room',(data)=>{
+        socket.on('join_room',function(data){
             console.log('join room request received with data', data);
 
             //if chat room is created then it'll join to that room otherwise create
